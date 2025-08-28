@@ -72,6 +72,15 @@ def edit_student(id):
     conn.close()
     return render_template("edit.html", student=student)
 
+@app.route("/delete/<int:id>")
+def delete_student(id):
+    conn = sqlite3.connect("students.db")
+    c = conn.cursor()
+    c.execute("DELETE FROM students WHERE id=?", (id,))
+    conn.commit()
+    conn.close()
+    return redirect(url_for("index")
+
 
 
 if __name__ == "__main__":
