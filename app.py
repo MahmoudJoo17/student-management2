@@ -31,6 +31,24 @@ def index():
     conn.close()
     return render_template("index.html", students=students)
 
+@app.route("/add", methods=["GET", "POST"])
+def add_student():
+    if request.method == "POST":
+        name = request.form["name"]
+        email = request.form["email"]
+        phone = request.form["phone"]
+        department = request.form["department"]
+        enrollment_date = request.form["enrollment_date"]
+
+        conn = sqlite3.connect("students.db")
+        c = conn.cursor()
+        c.execute("INSERT INTO students (name, email, phone, department, enrollment_date) VALUES (?, ?, ?, ?, ?)",
+                  (name, email, phone, department, enrollment_date))
+        conn.commit()
+        conn.close()
+        return redirect(url_for("index"))
+    return render_template("add.html")
+
 
 if __name__ == "__main__":
     app.run(debug=True)
