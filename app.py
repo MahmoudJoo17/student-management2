@@ -49,6 +49,30 @@ def add_student():
         return redirect(url_for("index"))
     return render_template("add.html")
 
+@app.route("/edit/<int:id>", methods=["GET", "POST"])
+def edit_student(id):
+    conn = sqlite3.connect("students.db")
+    c = conn.cursor()
+
+    if request.method == "POST":
+        name = request.form["name"]
+        email = request.form["email"]
+        phone = request.form["phone"]
+        department = request.form["department"]
+        enrollment_date = request.form["enrollment_date"]
+
+        c.execute("UPDATE students SET name=?, email=?, phone=?, department=?, enrollment_date=? WHERE id=?",
+                  (name, email, phone, department, enrollment_date, id))
+        conn.commit()
+        conn.close()
+        return redirect(url_for("index"))
+
+    c.execute("SELECT * FROM students WHERE id=?", (id,))
+    student = c.fetchone()
+    conn.close()
+    return render_template("edit.html", student=student)
+
+
 
 if __name__ == "__main__":
     app.run(debug=True)
