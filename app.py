@@ -20,9 +20,17 @@ def init_db():
     conn.close()
 
 init_db()
+
+# ========== Routes ==========
 @app.route("/")
 def index():
-    return "Hello, World!"
+    conn = sqlite3.connect("students.db")
+    c = conn.cursor()
+    c.execute("SELECT * FROM students")
+    students = c.fetchall()
+    conn.close()
+    return render_template("index.html", students=students)
+
 
 if __name__ == "__main__":
     app.run(debug=True)
