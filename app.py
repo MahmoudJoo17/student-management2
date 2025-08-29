@@ -1,4 +1,4 @@
-from flask import Flask
+from flask import Flask, render_template, request, redirect, url_for
 import sqlite3
 
 app = Flask(__name__)
@@ -79,7 +79,7 @@ def delete_student(id):
     c.execute("DELETE FROM students WHERE id=?", (id,))
     conn.commit()
     conn.close()
-    return redirect(url_for("index")
+    return redirect(url_for("index"))
 
 
 
